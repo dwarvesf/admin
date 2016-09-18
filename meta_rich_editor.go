@@ -6,6 +6,8 @@ import (
 
 type RichEditorConfig struct {
 	AssetManager *Resource
+	Settings     map[string]interface{}
+	metaConfig
 }
 
 // ConfigureQorMeta configure rich editor meta

@@ -27,7 +27,7 @@ type routeHandler struct {
 
 func newRouteHandler(path string, handle requestHandler, configs ...RouteConfig) routeHandler {
 	handler := routeHandler{
-		Path:   "/" + strings.Trim(path, "/"),
+		Path:   "/" + strings.TrimPrefix(path, "/"),
 		Handle: handle,
 	}
 
@@ -99,8 +99,8 @@ func (handler routeHandler) try(path string) (url.Values, bool) {
 
 			if (j < len(handler.Path)) && handler.Path[j] == '[' {
 				var index int
-				if i := strings.Index(handler.Path[j:], "]/"); i > 0 {
-					index = i
+				if idx := strings.Index(handler.Path[j:], "]/"); idx > 0 {
+					index = idx
 				} else if handler.Path[len(handler.Path)-1] == ']' {
 					index = len(handler.Path) - j - 1
 				}
