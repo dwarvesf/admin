@@ -323,8 +323,9 @@
       var dataType;
       var load;
       var actionData = data.actionData;
-      var hasSearch = $('.qor-search-container').length;
       var selectModal = this.resourseData.selectModal;
+      var hasSearch = selectModal && $('.qor-search-container').length;
+      var ingoreSubmit = this.resourseData.ingoreSubmit;
 
       if (!url) {
         return;
@@ -353,6 +354,10 @@
 
               if (!$content.length) {
                 return;
+              }
+
+              if (ingoreSubmit) {
+                $content.find(CLASS_BODY_HEAD).remove();
               }
 
               $content.find('.qor-button--cancel').attr('data-dismiss', 'bottomsheets');
