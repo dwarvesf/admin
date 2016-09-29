@@ -44,7 +44,7 @@
 
       var buttonHtml = [];
       $.each(vee.defaults.datas, function(k, v){
-        buttonHtml.push('<a href="#" class="veeNewButton" data-type="'+k+'">'+v.title+'</a>');
+        buttonHtml.push('<a href="#" class="veeNewButton" data-type="'+k+'">'+k+'</a>');
       });
 
       $(vee.defaults.actionSelect).html(buttonHtml.join(""));
