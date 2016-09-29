@@ -38,7 +38,8 @@
       if($('.veeContent', vee.defaults.contentSelect).size() == 0){
         var veeContentTemplate = $('<div class="veeContent"></div>');
         var position = vee.defaults.flex ? 'absolute' : 'relative';
-        veeContentTemplate.css({ 'position': position, 'width': vee.defaults.width, 'height': vee.defaults.height, 'min-height': 200 });
+        var height = $(vee.defaults.contentSelect).width() * (vee.defaults.height / vee.defaults.width)
+        veeContentTemplate.css({ 'position': position, 'width': "100%", 'height': height, border: '#ccc solid 1px' });
         $(vee.defaults.contentSelect).html(veeContentTemplate);
       }
 
