@@ -31,7 +31,7 @@
   var CLASS_BOTTOMSHEETS = '.qor-bottomsheets';
   var CLASS_SELECTED = 'is_selected';
   var CLASS_ONE = 'qor-bottomsheets__select-one';
-  
+
 
   function QorSelectOne(element, options) {
     this.$element = $(element);
@@ -49,10 +49,19 @@
     bind: function () {
       $document.on(EVENT_CLICK, '[data-selectone-url]', this.openBottomSheets.bind(this)).
                 on(EVENT_RELOAD, '.' + CLASS_ONE, this.reloadData.bind(this));
-      
+
       this.$element.
         on(EVENT_CLICK, CLASS_CLEAR_SELECT, this.clearSelect).
         on(EVENT_CLICK, CLASS_CHANGE_SELECT, this.changeSelect);
+    },
+
+    unbind: function () {
+      $document.off(EVENT_CLICK, '[data-selectone-url]', this.openBottomSheets.bind(this)).
+                off(EVENT_RELOAD, '.' + CLASS_ONE, this.reloadData.bind(this));
+
+      this.$element.
+        off(EVENT_CLICK, CLASS_CLEAR_SELECT, this.clearSelect).
+        off(EVENT_CLICK, CLASS_CHANGE_SELECT, this.changeSelect);
     },
 
     clearSelect: function () {
@@ -75,10 +84,13 @@
     },
 
     openBottomSheets: function (e) {
-      var data = $(e.target).data();
+      var $this = $(e.target),
+          data = $this.data();
 
       this.BottomSheets = $body.data('qor.bottomsheets');
       this.bottomsheetsData = data;
+      this.$parent = $this.closest(CLASS_PARENT);
+
       data.url = data.selectoneUrl;
 
       this.SELECT_ONE_SELECTED_ICON = $('[name="select-one-selected-icon"]').html();
@@ -87,7 +99,7 @@
     },
 
     initItem: function () {
-      var $selectFeild = $(this.bottomsheetsData.selectId).closest(CLASS_PARENT).find(CLASS_SELECT_FIELD),
+      var $selectFeild = this.$parent.find(CLASS_SELECT_FIELD),
           selectedID;
 
       if (!$selectFeild.length) {
@@ -119,20 +131,22 @@
       this.initItem();
     },
 
-    formatSelectResults: function (data) {
-      this.formatResults(data);
+    formatSelectResults: function (e, data) {
+      this.formatResults(e, data);
     },
 
-    formatSubmitResults: function (data) {
-      this.formatResults(data, true);
+    formatSubmitResults: function (e, data) {
+      this.formatResults(e, data, true);
     },
 
-    formatResults: function (data, isNewData) {
+    formatResults: function (e, data, isNewData) {
       var template,
           bottomsheetsData = this.bottomsheetsData,
-          $select = $(bottomsheetsData.selectId),
-          $target = $select.closest(CLASS_PARENT),
-          $selectFeild = $target.find(CLASS_SELECT_FIELD);
+          $parent = this.$parent,
+          $select = bottomsheetsData.selectId ? $(bottomsheetsData.selectId) : $parent.find('select'),
+          $selectFeild = $parent.find(CLASS_SELECT_FIELD);
+
+      data.displayName = data.Text || data.Name || data.Title || data.Code || data[Object.keys(data)[0]];
 
       $select[0].value = data.primaryKey;
       template = this.renderSelectOne(data);
@@ -141,8 +155,8 @@
         $selectFeild.remove();
       }
 
-      $target.prepend(template);
-      $target.find(CLASS_SELECT_TRIGGER).hide();
+      $parent.prepend(template);
+      $parent.find(CLASS_SELECT_TRIGGER).hide();
 
       if (isNewData) {
         $select.append(Mustache.render(QorSelectOne.SELECT_ONE_OPTION_TEMPLATE, data));
@@ -150,11 +164,16 @@
       }
 
       this.BottomSheets.hide();
+    },
+
+    destroy: function () {
+      this.unbind();
+      this.$element.removeData(NAMESPACE);
     }
 
   };
 
-  QorSelectOne.SELECT_ONE_OPTION_TEMPLATE = '<option value="[[ primaryKey ]]" >[[ Name ]]</option>';
+  QorSelectOne.SELECT_ONE_OPTION_TEMPLATE = '<option value="[[ primaryKey ]]" >[[ displayName ]]</option>';
 
   QorSelectOne.plugin = function (options) {
     return this.each(function () {

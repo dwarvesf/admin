@@ -51,10 +51,20 @@
     bind: function () {
       $document.on(EVENT_CLICK, '[data-selectmany-url]', this.openBottomSheets.bind(this)).
                 on(EVENT_RELOAD, '.' + CLASS_MANY, this.reloadData.bind(this));
-      
+
       this.$element
         .on(EVENT_CLICK, CLASS_CLEAR_SELECT, this.clearSelect.bind(this))
         .on(EVENT_CLICK, CLASS_UNDO_DELETE, this.undoDelete.bind(this));
+
+    },
+
+    unbind: function () {
+      $document.off(EVENT_CLICK, '[data-selectmany-url]', this.openBottomSheets.bind(this)).
+                off(EVENT_RELOAD, '.' + CLASS_MANY, this.reloadData.bind(this));
+
+      this.$element
+        .off(EVENT_CLICK, CLASS_CLEAR_SELECT, this.clearSelect.bind(this))
+        .off(EVENT_CLICK, CLASS_UNDO_DELETE, this.undoDelete.bind(this));
 
     },
 
@@ -79,12 +89,13 @@
     },
 
     openBottomSheets: function (e) {
-      var data = $(e.target).data();
+      var $this = $(e.target),
+          data = $this.data();
 
       this.BottomSheets = $body.data('qor.bottomsheets');
       this.bottomsheetsData = data;
 
-      this.$selector = $(data.selectId);
+      this.$selector = data.selectId ? $(data.selectId) : $this.closest(CLASS_PARENT).find('select');
       this.$selectFeild = this.$selector.closest(CLASS_PARENT).find(CLASS_SELECT_FIELD);
 
       // select many templates
@@ -223,15 +234,17 @@
       this.initItems();
     },
 
-    formatSelectResults: function (data) {
-      this.formatResults(data);
+    formatSelectResults: function (e, data) {
+      this.formatResults(e, data);
     },
 
-    formatSubmitResults: function (data) {
-      this.formatResults(data, true);
+    formatSubmitResults: function (e, data) {
+      this.formatResults(e, data, true);
     },
 
-    formatResults: function (data, isNewData) {
+    formatResults: function (e, data, isNewData) {
+      data.displayName = data.Text || data.Name || data.Title || data.Code || data[Object.keys(data)[0]];
+
       if (isNewData) {
         this.addItem(data, true);
         return;
@@ -252,11 +265,16 @@
       this.updateHint(this.getSelectedItemData());
       this.updateSelectInputData();
 
+    },
+
+    destroy: function () {
+      this.unbind();
+      this.$element.removeData(NAMESPACE);
     }
 
   };
 
-  QorSelectMany.SELECT_MANY_OPTION_TEMPLATE = '<option value="[[ primaryKey ]]" >[[ Name ]]</option>';
+  QorSelectMany.SELECT_MANY_OPTION_TEMPLATE = '<option value="[[ primaryKey ]]" >[[ displayName ]]</option>';
 
   QorSelectMany.plugin = function (options) {
     return this.each(function () {

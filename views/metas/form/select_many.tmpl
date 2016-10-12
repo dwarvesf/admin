@@ -39,7 +39,7 @@
 
   <script name="select-many-template" type="x-tmpl-mustache">
     <li data-primary-key="[[ primaryKey ]]">
-      <span>[[ &Name ]]</span>
+      <span>[[ &displayName ]]</span>
       <a href="javascripr://" class="qor-selected-many__undo">
         {{marshal (t "qor_admin.form.undo" "UNDO")}}
       </a>
@@ -59,7 +59,7 @@
         {{end}}
       </ul>
 
-      <a  href="javascript://" class="mdl-button mdl-button--colored qor-field__selectmany-trigger" data-select-modal="many" data-select-id="#{{.InputId}}" data-selectmany-url="{{url_for .Meta.Config.RemoteDataResource}}">
+      <a  href="javascript://" class="mdl-button mdl-button--primary qor-field__selectmany-trigger" data-select-modal="many" {{if .InputId}}data-select-id="#{{.InputId}}"{{end}} data-selectmany-url="{{url_for .Meta.Config.RemoteDataResource}}">
         {{t "qor_admin.form.add_items" "ADD ITEMS"}}
       </a>
 
