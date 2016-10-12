@@ -788,28 +788,6 @@ func (context *Context) convertSectionToMetas(res *Resource, sections []*Section
 	return res.ConvertSectionToMetas(sections)
 }
 
-func (context *Context) convertVisualEditorSetting(meta *Meta) string {
-	visualEditorSetting := meta.Resource.Value.(*VisualEditorSetting)
-	settingJson := map[string]interface{}{}
-	for _, element := range visualEditorSetting.Elements {
-		elementSetting := map[string]interface{}{}
-		elementSetting["title"] = element.Name
-		elementSetting["template"] = element.Template
-		metasSetting := map[string]interface{}{}
-		for _, meta := range element.Resource.Metas {
-			metasSetting[meta.Name] = map[string]string{
-				"default": "aaa",
-				"type":    meta.Type,
-			}
-		}
-		elementSetting["keys"] = metasSetting
-		settingJson[strings.Replace(element.Name, " ", "_", -1)] = elementSetting
-	}
-
-	jsonString, _ := json.Marshal(settingJson)
-	return string(jsonString)
-}
-
 type formatedError struct {
 	Label  string
 	Errors []string
@@ -988,18 +966,17 @@ func (context *Context) FuncMap() template.FuncMap {
 			return false
 		},
 
-		"get_menus":                     context.getMenus,
-		"get_scopes":                    context.GetScopes,
-		"get_formatted_errors":          context.getFormattedErrors,
-		"load_actions":                  context.loadActions,
-		"allowed_actions":               context.AllowedActions,
-		"is_sortable_meta":              context.isSortableMeta,
-		"index_sections":                context.indexSections,
-		"show_sections":                 context.showSections,
-		"new_sections":                  context.newSections,
-		"edit_sections":                 context.editSections,
-		"convert_sections_to_metas":     context.convertSectionToMetas,
-		"convert_visual_editor_setting": context.convertVisualEditorSetting,
+		"get_menus":                 context.getMenus,
+		"get_scopes":                context.GetScopes,
+		"get_formatted_errors":      context.getFormattedErrors,
+		"load_actions":              context.loadActions,
+		"allowed_actions":           context.AllowedActions,
+		"is_sortable_meta":          context.isSortableMeta,
+		"index_sections":            context.indexSections,
+		"show_sections":             context.showSections,
+		"new_sections":              context.newSections,
+		"edit_sections":             context.editSections,
+		"convert_sections_to_metas": context.convertSectionToMetas,
 
 		"has_create_permission": context.hasCreatePermission,
 		"has_read_permission":   context.hasReadPermission,

@@ -37,11 +37,11 @@
     initStatus : function (){
       if($('.veeContent', vee.defaults.contentSelect).size() == 0){
         var veeContentTemplate = $('<div class="veeContent"></div>');
-        var position = vee.defaults.flex ? 'absolute' : 'relative';
-        var height = $(vee.defaults.contentSelect).width() * (vee.defaults.height / vee.defaults.width)
-        veeContentTemplate.css({ 'position': position, 'width': "100%", 'height': height, border: '#ccc solid 1px' });
         $(vee.defaults.contentSelect).html(veeContentTemplate);
       }
+      var position = vee.defaults.flex ? 'absolute' : 'relative';
+      var height = $(vee.defaults.contentSelect).width() * (vee.defaults.height / vee.defaults.width)
+      $('.veeContent', vee.defaults.contentSelect).css({ 'position': position, 'width': "100%", 'height': height, border: '#ccc solid 1px' });
 
       var buttonHtml = [];
       $.each(vee.defaults.datas, function(k, v){
@@ -143,6 +143,7 @@
         if (vee.defaults.flex) {
           vee.restoreElementRealPosition();
         };
+        $(".veeContent", vee.defaults.contentSelect).css({ "height" : "auto", "border": "" });
         $this.val($(vee.defaults.contentSelect).html());
       });
     },
