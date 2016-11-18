@@ -961,6 +961,9 @@ func (context *Context) pageTitle() template.HTML {
 		if !context.Resource.Config.Singleton {
 			usePlural = true
 		}
+		if context.Resource.Config.SingletonName {
+			usePlural = false
+		}
 	}
 
 	var resourceName string
