@@ -74,10 +74,10 @@ func (res *Resource) ToParam() string {
 		}); ok {
 			res.params = value.ToParam()
 		} else {
-			if res.Config.Singleton == true {
+			res.params = utils.ToParamString(inflection.Plural(res.Name))
+			if res.Config.Singleton == true || res.Config.SingletonURL == true {
 				res.params = utils.ToParamString(res.Name)
 			}
-			res.params = utils.ToParamString(inflection.Plural(res.Name))
 		}
 	}
 	return res.params
