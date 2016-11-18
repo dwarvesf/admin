@@ -165,7 +165,7 @@ func (admin *Admin) AddResource(value interface{}, config ...*Config) *Resource 
 
 	if !res.Config.Invisible {
 		var menuName string
-		if res.Config.Singleton {
+		if res.Config.Singleton || res.Config.SingletonName {
 			menuName = res.Name
 		} else {
 			menuName = inflection.Plural(res.Name)
