@@ -998,6 +998,9 @@ func (context *Context) FuncMap() template.FuncMap {
 		"raw":        func(str string) template.HTML { return template.HTML(utils.HTMLSanitizer.Sanitize(str)) },
 		"equal":      equal,
 		"stringify":  utils.Stringify,
+		"title_case": func(value interface{}) string {
+			return strings.Title(fmt.Sprint(value))
+		},
 		"lower": func(value interface{}) string {
 			return strings.ToLower(fmt.Sprint(value))
 		},
