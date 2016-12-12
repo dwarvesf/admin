@@ -80,9 +80,9 @@ func (res *Resource) ToParam() string {
 				s = strings.Replace(s, v, " ", -1)
 			}
 
-			res.params = utils.ToParamString(inflection.Plural(res.Name))
+			res.params = utils.ToParamString(inflection.Plural(s))
 			if res.Config.Singleton == true || res.Config.SingletonURL == true {
-				res.params = utils.ToParamString(res.Name)
+				res.params = utils.ToParamString(s)
 			}
 		}
 	}
