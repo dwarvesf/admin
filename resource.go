@@ -75,14 +75,15 @@ func (res *Resource) ToParam() string {
 			res.params = value.ToParam()
 		} else {
 			// remove special chars
-			s := res.Name
-			for _, v := range []string{"/", "-", "&"} {
-				s = strings.Replace(s, v, " ", -1)
+			// s := res.Name
+			for _, v := range []string{"/", "&", "-"} {
+				res.Name = strings.Replace(res.Name, v, " ", -1)
 			}
+			res.Name = strings.Replace(res.Name, "  ", " ", -1)
 
-			res.params = utils.ToParamString(inflection.Plural(s))
+			res.params = utils.ToParamString(inflection.Plural(res.Name))
 			if res.Config.Singleton == true || res.Config.SingletonURL == true {
-				res.params = utils.ToParamString(s)
+				res.params = utils.ToParamString(res.Name)
 			}
 		}
 	}

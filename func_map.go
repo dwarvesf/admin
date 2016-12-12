@@ -968,9 +968,9 @@ func (context *Context) pageTitle() template.HTML {
 
 	var resourceName string
 	if usePlural {
-		resourceName = string(context.t(fmt.Sprintf("%v.name.plural", context.Resource.ToParam()), inflection.Plural(context.Resource.Name)))
+		resourceName = string(context.t(fmt.Sprintf("%v.name.plural", context.Resource.ToParam()), inflection.Plural(context.Resource.Title)))
 	} else {
-		resourceName = string(context.t(fmt.Sprintf("%v.name", context.Resource.ToParam()), context.Resource.Name))
+		resourceName = string(context.t(fmt.Sprintf("%v.name", context.Resource.ToParam()), context.Resource.Title))
 	}
 
 	return context.t(titleKey, defaultValue, resourceName)

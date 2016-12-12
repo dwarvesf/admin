@@ -125,6 +125,7 @@ func (admin *Admin) newResource(value interface{}, config ...*Config) *Resource 
 	} else if namer, ok := value.(ResourceNamer); ok {
 		res.Name = namer.ResourceName()
 	}
+	res.Title = res.Name
 
 	// Configure resource when initializing
 	modelType := utils.ModelType(res.Value)
