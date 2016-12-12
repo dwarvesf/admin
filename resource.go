@@ -74,6 +74,12 @@ func (res *Resource) ToParam() string {
 		}); ok {
 			res.params = value.ToParam()
 		} else {
+			// remove special chars
+			s := res.Name
+			for _, v := range []string{"/", "-", "&"} {
+				s = strings.Replace(s, v, " ", -1)
+			}
+
 			res.params = utils.ToParamString(inflection.Plural(res.Name))
 			if res.Config.Singleton == true || res.Config.SingletonURL == true {
 				res.params = utils.ToParamString(res.Name)
