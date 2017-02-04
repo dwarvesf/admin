@@ -17,6 +17,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/utils"
+	"github.com/gosimple/slug"
 	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/inflection"
 	"github.com/qor/qor"
@@ -1057,7 +1060,10 @@ func (context *Context) FuncMap() template.FuncMap {
 			key := fmt.Sprintf("%v.attributes.%v.placeholder", meta.baseResource.ToParam(), meta.Label)
 			return context.Admin.T(context.Context, key, placeholder)
 		},
-
+		"slug_meta_label": func(meta *Meta) template.HTML {
+			key := fmt.Sprintf("%v.attributes.%v", meta.baseResource.ToParam(), meta.Label)
+			return context.Admin.T(context.Context, key, slug.Make(meta.Label))
+		},
 		"url_for":            context.URLFor,
 		"link_to":            context.linkTo,
 		"patch_current_url":  context.patchCurrentURL,
