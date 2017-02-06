@@ -1064,6 +1064,9 @@ func (context *Context) FuncMap() template.FuncMap {
 			key := fmt.Sprintf("%v.attributes.%v", meta.baseResource.ToParam(), meta.Label)
 			return context.Admin.T(context.Context, key, slug.Make(meta.Label))
 		},
+		"plus": func(i, number int) int {
+			return i + number
+		},
 		"url_for":            context.URLFor,
 		"link_to":            context.linkTo,
 		"patch_current_url":  context.patchCurrentURL,
