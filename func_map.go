@@ -933,7 +933,7 @@ func (context *Context) AllowedActions(actions []*Action, mode string, records .
 
 func (context *Context) pageTitle() template.HTML {
 	if context.Action == "search_center" {
-		return context.t("qor_admin.search_center.title", "Search Center")
+		return context.t("qor_admin.search_center.title", "Search Centre")
 	}
 
 	if context.Resource == nil {
