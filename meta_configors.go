@@ -3,8 +3,8 @@ package admin
 import (
 	"time"
 
-	"github.com/qor/qor"
-	"github.com/qor/qor/utils"
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/utils"
 )
 
 var metaConfigorMaps = map[string]func(*Meta){
@@ -19,12 +19,12 @@ var metaConfigorMaps = map[string]func(*Meta){
 					if date.IsZero() {
 						return ""
 					}
-					return utils.FormatTime(*date, "2006-01-02", context)
+					return utils.FormatTime(*date, "02-01-2006", context)
 				case time.Time:
 					if date.IsZero() {
 						return ""
 					}
-					return utils.FormatTime(date, "2006-01-02", context)
+					return utils.FormatTime(date, "02-01-2006", context)
 				default:
 					return date
 				}
@@ -43,12 +43,12 @@ var metaConfigorMaps = map[string]func(*Meta){
 					if date.IsZero() {
 						return ""
 					}
-					return utils.FormatTime(*date, "2006-01-02 15:04", context)
+					return utils.FormatTime(*date, "02-01-2006 15:04", context)
 				case time.Time:
 					if date.IsZero() {
 						return ""
 					}
-					return utils.FormatTime(date, "2006-01-02 15:04", context)
+					return utils.FormatTime(date, "02-01-2006 15:04", context)
 				default:
 					return date
 				}

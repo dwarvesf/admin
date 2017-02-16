@@ -6,11 +6,11 @@ import (
 	"net/http/httptest"
 	"time"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/test/utils"
 	"github.com/jinzhu/gorm"
 	"github.com/qor/admin"
 	"github.com/qor/media_library"
-	"github.com/qor/qor"
-	"github.com/qor/qor/test/utils"
 
 	_ "github.com/mattn/go-sqlite3"
 )

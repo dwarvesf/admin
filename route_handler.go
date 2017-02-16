@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/qor/qor"
+	"github.com/dwarvesf/qor"
 	"github.com/qor/roles"
 )
 

@@ -31,7 +31,7 @@ import (
 
     "github.com/jinzhu/gorm"
     _ "github.com/mattn/go-sqlite3"
-    "github.com/qor/qor"
+    "github.com/dwarvesf/qor"
     "github.com/qor/admin"
 )
 
@@ -465,7 +465,7 @@ There are a few plugins created for QOR already, you can find some of them at [h
 ## Live DEMO
 
 * Live Demo [http://demo.getqor.com/admin](http://demo.getqor.com/admin)
-* Source Code of Live Demo [https://github.com/qor/qor-example](https://github.com/qor/qor-example)
+* Source Code of Live Demo [https://github.com/dwarvesf/qor-example](https://github.com/dwarvesf/qor-example)
 
 ## Q & A
 

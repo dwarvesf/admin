@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
 )
 
 func generateResourceMenu(resource *Resource) *Menu {

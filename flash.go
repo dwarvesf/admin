@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/qor/qor/utils"
+	"github.com/dwarvesf/qor/utils"
 )
 
 // FlashNow add flash message to current request

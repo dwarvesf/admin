@@ -22,8 +22,6 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/inflection"
-	"github.com/qor/qor"
-	"github.com/qor/qor/utils"
 	"github.com/qor/roles"
 )
 
@@ -325,13 +323,9 @@ func (context *Context) renderMeta(meta *Meta, value interface{}, prefix []strin
 
 	switch {
 	case meta.Config != nil:
-		if templater, ok := meta.Config.(interface {
-			GetTemplate(context *Context, metaType string) ([]byte, error)
-		}); ok {
-			if content, err = templater.GetTemplate(context, metaType); err == nil {
-				tmpl, err = tmpl.Parse(string(content))
-				break
-			}
+		if content, err = meta.Config.GetTemplate(context, metaType); err == nil {
+			tmpl, err = tmpl.Parse(string(content))
+			break
 		}
 		fallthrough
 	default:
@@ -1047,18 +1041,6 @@ func (context *Context) FuncMap() template.FuncMap {
 		"meta_label": func(meta *Meta) template.HTML {
 			key := fmt.Sprintf("%v.attributes.%v", meta.baseResource.ToParam(), meta.Label)
 			return context.Admin.T(context.Context, key, meta.Label)
-		},
-		"meta_placeholder": func(meta *Meta, context *Context, placeholder string) template.HTML {
-			if getPlaceholder, ok := meta.Config.(interface {
-				GetPlaceholder(*Context) (template.HTML, bool)
-			}); ok {
-				if str, ok := getPlaceholder.GetPlaceholder(context); ok {
-					return str
-				}
-			}
-
-			key := fmt.Sprintf("%v.attributes.%v.placeholder", meta.baseResource.ToParam(), meta.Label)
-			return context.Admin.T(context.Context, key, placeholder)
 		},
 		"slug_meta_label": func(meta *Meta) template.HTML {
 			key := fmt.Sprintf("%v.attributes.%v", meta.baseResource.ToParam(), meta.Label)

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/qor/qor"
-	"github.com/qor/qor/utils"
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/utils"
 	"github.com/qor/roles"
 )
 

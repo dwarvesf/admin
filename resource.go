@@ -6,11 +6,11 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
+	"github.com/dwarvesf/qor/utils"
 	"github.com/jinzhu/gorm"
 	"github.com/jinzhu/inflection"
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
-	"github.com/qor/qor/utils"
 	"github.com/qor/roles"
 )
 
@@ -124,6 +124,49 @@ func (res *Resource) GetTheme(name string) ThemeInterface {
 // Decode decode context into a value
 func (res *Resource) Decode(context *qor.Context, value interface{}) error {
 	return resource.Decode(context, value, res)
+}
+
+func (res *Resource) convertObjectToJSONMap(context *Context, value interface{}, kind string) interface{} {
+	reflectValue := reflect.ValueOf(value)
+	for reflectValue.Kind() == reflect.Ptr {
+		reflectValue = reflectValue.Elem()
+	}
+
+	switch reflectValue.Kind() {
+	case reflect.Slice:
+		values := []interface{}{}
+		for i := 0; i < reflectValue.Len(); i++ {
+			if reflectValue.Index(i).Kind() == reflect.Ptr {
+				values = append(values, res.convertObjectToJSONMap(context, reflectValue.Index(i).Interface(), kind))
+			} else {
+				values = append(values, res.convertObjectToJSONMap(context, reflectValue.Index(i).Addr().Interface(), kind))
+			}
+		}
+		return values
+	case reflect.Struct:
+		var metas []*Meta
+		if kind == "index" {
+			metas = res.ConvertSectionToMetas(res.allowedSections(res.IndexAttrs(), context, roles.Update))
+		} else if kind == "edit" {
+			metas = res.ConvertSectionToMetas(res.allowedSections(res.EditAttrs(), context, roles.Update))
+		} else if kind == "show" {
+			metas = res.ConvertSectionToMetas(res.allowedSections(res.ShowAttrs(), context, roles.Read))
+		}
+
+		values := map[string]interface{}{}
+		for _, meta := range metas {
+			if meta.HasPermission(roles.Read, context.Context) {
+				if meta.Resource != nil && (meta.FieldStruct != nil && meta.FieldStruct.Relationship != nil && (meta.FieldStruct.Relationship.Kind == "has_one" || meta.FieldStruct.Relationship.Kind == "has_many")) {
+					values[meta.GetName()] = meta.Resource.convertObjectToJSONMap(context, context.RawValueOf(value, meta), kind)
+				} else {
+					values[meta.GetName()] = context.FormattedValueOf(value, meta)
+				}
+			}
+		}
+		return values
+	default:
+		return value
+	}
 }
 
 func (res *Resource) allAttrs() []string {

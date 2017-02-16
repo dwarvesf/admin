@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
+	"github.com/dwarvesf/qor/utils"
 	"github.com/jinzhu/gorm"
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
-	"github.com/qor/qor/utils"
 	"github.com/qor/roles"
 )
 
@@ -47,6 +47,7 @@ func (metaConfig) GetTemplate(context *Context, metaType string) ([]byte, error)
 // MetaConfigInterface meta config interface
 type MetaConfigInterface interface {
 	resource.MetaConfigInterface
+	GetTemplate(context *Context, metaType string) ([]byte, error)
 }
 
 // GetMetas get sub metas

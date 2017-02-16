@@ -7,7 +7,7 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/qor/qor"
+	"github.com/dwarvesf/qor"
 )
 
 type Product struct {

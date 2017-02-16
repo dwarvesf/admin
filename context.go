@@ -2,14 +2,15 @@ package admin
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
 	"path/filepath"
 
-	"github.com/qor/qor"
-	"github.com/qor/qor/utils"
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/utils"
 )
 
 // Context admin context, which is used for admin controller
@@ -210,28 +211,16 @@ func (context *Context) Execute(name string, result interface{}) {
 
 // JSON generate json outputs for action
 func (context *Context) JSON(action string, result interface{}) {
-	if context.Encode(action, result) == nil {
-		context.Writer.Header().Set("Content-Type", "application/json")
-	}
-}
-
-// XML generate xml outputs for action
-func (context *Context) XML(action string, result interface{}) {
-	if context.Encode(action, result) == nil {
-		context.Writer.Header().Set("Content-Type", "application/xml")
-	}
-}
-
-func (context *Context) Encode(action string, result interface{}) error {
 	if action == "show" && !context.Resource.isSetShowAttrs {
 		action = "edit"
 	}
 
-	encoder := Encoder{
-		Action:   action,
-		Resource: context.Resource,
-		Context:  context,
-		Result:   result,
+	js, err := json.MarshalIndent(context.Resource.convertObjectToJSONMap(context, result, action), "", "\t")
+	context.Writer.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		result := make(map[string]string)
+		result["error"] = err.Error()
+		js, _ = json.Marshal(result)
 	}
-	return context.Admin.Encode(context.Writer, encoder)
+	context.Writer.Write(js)
 }

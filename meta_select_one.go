@@ -7,16 +7,15 @@ import (
 	"path"
 	"reflect"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
+	"github.com/dwarvesf/qor/utils"
 	"github.com/jinzhu/gorm"
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
-	"github.com/qor/qor/utils"
 )
 
 // SelectOneConfig meta configuration used for select one
 type SelectOneConfig struct {
 	Collection               interface{} // []string, [][]string, func(interface{}, *qor.Context) [][]string, func(interface{}, *admin.Context) [][]string
-	Placeholder              string
 	AllowBlank               bool
 	SelectionTemplate        string
 	SelectMode               string // select, select_async, bottom_sheet
@@ -25,11 +24,6 @@ type SelectOneConfig struct {
 	RemoteDataResource       *Resource
 	metaConfig
 	getCollection func(interface{}, *Context) [][]string
-}
-
-// GetPlaceholder get placeholder
-func (selectOneConfig SelectOneConfig) GetPlaceholder(*Context) (template.HTML, bool) {
-	return template.HTML(selectOneConfig.Placeholder), selectOneConfig.Placeholder != ""
 }
 
 // GetTemplate get template for selection template

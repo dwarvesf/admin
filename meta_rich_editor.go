@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"github.com/qor/qor/resource"
+	"github.com/dwarvesf/qor/resource"
 )
 
 type RichEditorConfig struct {

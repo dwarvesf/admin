@@ -3,7 +3,7 @@ package admin
 import (
 	"path"
 
-	"github.com/qor/qor"
+	"github.com/dwarvesf/qor"
 	"github.com/qor/roles"
 )
 

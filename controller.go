@@ -34,8 +34,6 @@ func (ac *Controller) Index(context *Context) {
 		context.Execute("index", result)
 	}).With("json", func() {
 		context.JSON("index", result)
-	}).With("xml", func() {
-		context.XML("index", result)
 	}).Respond(context.Request)
 }
 
@@ -111,8 +109,6 @@ func (ac *Controller) Show(context *Context) {
 		context.Execute("show", result)
 	}).With("json", func() {
 		context.JSON("show", result)
-	}).With("xml", func() {
-		context.XML("show", result)
 	}).Respond(context.Request)
 }
 

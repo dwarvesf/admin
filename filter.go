@@ -1,10 +1,10 @@
 package admin
 
 import (
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
+	"github.com/dwarvesf/qor/utils"
 	"github.com/jinzhu/gorm"
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
-	"github.com/qor/qor/utils"
 )
 
 // Filter register filter for qor resource

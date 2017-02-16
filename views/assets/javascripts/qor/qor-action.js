@@ -25,7 +25,7 @@
   var MDL_BODY = '.mdl-layout__content';
   var ACTION_SELECTORS = '.qor-actions';
   var ACTION_LINK = 'a.qor-action--button';
-  var MENU_ACTIONS = '.qor-table__actions a[data-url],[data-url][data-method=POST],[data-url][data-method=PUT],[data-url][data-method=DELETE]';
+  var MENU_ACTIONS = '.qor-table__actions a[data-url]';
   var BUTTON_BULKS = '.qor-action-bulk-buttons';
   var QOR_TABLE = '.qor-table-container';
   var QOR_TABLE_BULK = '.qor-table--bulking';
@@ -102,13 +102,11 @@
       }
     },
 
-    actionSubmit: function ($action) {
-      var $target = $($action);
+    actionSubmit: function (e) {
+      var $target = $(e.target);
       this.$actionButton = $target;
-      if ($target.data().method) {
-        this.submit();
-        return false;
-      }
+      $target.data().method && this.submit();
+      return false;
     },
 
     click: function (e) {
@@ -239,10 +237,9 @@
           } else if (needDisableButtons){
             _this.switchButtons($element, 1);
           }
-        },
-        success: function (data, status, response) {
-          var contentType = response.getResponseHeader("content-type");
 
+        },
+        success: function (data) {
           // has undo action
           if (undoUrl) {
             $element.triggerHandler(EVENT_UNDO, [$actionButton, isUndo, data]);
@@ -251,16 +248,16 @@
             return;
           }
 
-          if (contentType.indexOf('json') > -1) {
-              // render notification
-              $('.qor-alert').remove();
-              needDisableButtons && _this.switchButtons($element);
-              isInSlideout ? $parent = $(QOR_SLIDEOUT) : $parent = $(MDL_BODY);
-              $parent.find(ACTION_BODY).prepend(_this.renderFlashMessage(data));
+          if (properties.fromIndex || properties.fromMenu){
+            window.location.reload();
+            return;
           } else {
-              // properties.fromIndex || properties.fromMenu
-              window.location.reload();
+            $('.qor-alert').remove();
+            needDisableButtons && _this.switchButtons($element);
+            isInSlideout ? $parent = $(QOR_SLIDEOUT) : $parent = $(MDL_BODY);
+            $parent.find(ACTION_BODY).prepend(_this.renderFlashMessage(data));
           }
+
         },
         error: function (xhr, textStatus, errorThrown) {
           if (undoUrl) {
@@ -402,8 +399,8 @@
       on(EVENT_ENABLE, function (e) {
         QorAction.plugin.call($(selector, e.target), options);
       }).
-      on(EVENT_CLICK, MENU_ACTIONS, function () {
-        (new QorAction()).actionSubmit(this);
+      on(EVENT_CLICK, MENU_ACTIONS, function (e) {
+        (new QorAction()).actionSubmit(e);
         return false;
       }).
       triggerHandler(EVENT_ENABLE);

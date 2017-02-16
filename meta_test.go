@@ -4,10 +4,10 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/dwarvesf/qor"
+	"github.com/dwarvesf/qor/resource"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/qor/admin"
-	"github.com/qor/qor"
-	"github.com/qor/qor/resource"
 )
 
 func TestTextInput(t *testing.T) {
